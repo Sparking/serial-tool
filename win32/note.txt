@@ -1,0 +1,22 @@
+struct handle_output成员属性:
+	HANDLE h			需要处理的句柄
+	HANDLE ev_to_main 	通知主线程的事件
+	HANDLE ev_from_main 主线程通知过来的事件
+	int moribund		杀掉线程的标志
+	int done			终结子线程的标志
+	int defunct			子线程退出的标志
+	int busy			进程正在进行操作的标志
+	void *privdata		客户端的标识,这里表现为串口的结构体成员
+	
+	int flags 			初始化时使用的标志符,之后保持只读状态。该标志设置串口的同步或者异步读取
+	
+	char *buffer		缓冲区
+	DWORD len			缓冲区大小
+	
+	DWORD lenwritten	已写入的大小
+	int writeerr		WriteFile返回的错误
+	
+	bufchain queued_data	未写完的数据
+	enum { EOF_NO, EOF_PENDING, EOF_SENT } outgoingeof
+	
+	handle_outputfn_t sentdata	写出bufchain时用到的回调函数
