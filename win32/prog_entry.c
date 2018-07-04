@@ -82,7 +82,7 @@ int main(int argc, char *argv[])
 	conf.stopbits = SER_STOPBITS_ONE;
 	conf.parity = SER_PAR_NONE;
 	conf.flow = SER_FLOW_NONE;
-	conf.obufsize = sizeof(int); /* size of a charactor */
+	conf.obufsize = 8; /* size of a charactor */
 	conf.ibufsize = 4096;
 	serial = create_serial(&conf);
  	if (serial == NULL) {

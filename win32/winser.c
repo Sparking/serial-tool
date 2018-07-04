@@ -234,7 +234,7 @@ struct serial_handle_input *serial_handle_input_init(struct serial_t *serial,
 			sizeof(struct serial_handle_input) + bufsize);
 	if (serial->in == NULL)
 		return NULL;
-	serial->in->flags = HANDLE_FLAG_OVERLAPPED | HANDLE_FLAG_UNITBUFFER |
+	serial->in->flags = HANDLE_FLAG_OVERLAPPED |
 			HANDLE_FLAG_IGNOREEOF;
 	serial->in->bufsize = bufsize;
 	serial->in->busy = false;

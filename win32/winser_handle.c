@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <conio.h>
-
+#include "keymap.h"
 #include "serial_handle.h"
 
 DWORD serial_handle_input_func(struct serial_handle_input *in)
@@ -97,17 +97,33 @@ DWORD WINAPI serial_in_thread(void *param)
 DWORD serial_handle_output_func(struct serial_handle_output *out)
 {
 	BOOL readret;
-	char ch;
+	int ch;
+	unsigned short size;
 
 	if (out->h == GetStdHandle(STD_INPUT_HANDLE)){
-		ch = getch(); /* also see _getwch() */
+		ch = _getwch(); /* also see _getwch() */
 		*(int *)out->buffer = ch;
 		out->handle_size = sizeof(char);
+		/* a key to exit program */
 		if (ch == 0x18) { /* should make input thread stop */
 			out->done = true;
-			*(int *)out->buffer = 0x04; /* ^D */
+			out->handle_size = 0;
+			/*
+			 * signal to stop input thread, and then clean the relative
+			 * buffer to make the function ReadFile quit, cause input
+			 * thread may be blocked by it.
+			 */
 			((struct serial_t *)out->super)->in->done = true;
+			PurgeComm(((struct serial_t *)out->super)->h, PURGE_RXCLEAR |
+				PURGE_RXABORT | PURGE_TXCLEAR | PURGE_TXABORT);
 			goto serial_handle_output_func_to_main_event_L0;
+		} else if (ch == 0xE0 || ch == 0x00) { /* Enter special key */
+			size = keymap_find((ch << 8) + _getwch(), out->buffer);
+			if (size == 0 || size > out->bufsize) {
+				out->buffer[0] = 0;
+				goto serial_handle_output_func_normal_return_L0;
+			}
+			out->handle_size = size;
 		}
 	} else {
 		readret = ReadFile(out->h, out->buffer, out->bufsize, &out->handle_size,
@@ -119,7 +135,8 @@ serial_handle_output_func_to_main_event_L0:
 			WaitForSingleObject(out->ev_from_main, INFINITE);
 		}
 	}
-	
+
+serial_handle_output_func_normal_return_L0:
 	return out->handle_size;
 }
 

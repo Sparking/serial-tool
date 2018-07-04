@@ -10,7 +10,8 @@ LIBS = -ladvapi32 -lcomdlg32 -lgdi32 -limm32 \
 		-lole32 -lshell32 -luser32
 
 target = winser.exe
-objs = prog_entry.o winser.o winser_handle.o
+objs = prog_entry.o winser.o winser_handle.o \
+		windows2unix_keymap.o
 
 .PHONY: all
 all: $(target)
