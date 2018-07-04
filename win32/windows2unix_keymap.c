@@ -32,7 +32,6 @@ static struct /* _win2unix_keymap_key_t */{
 {/* "F12",      */0xE086, 5, 0x1B5B32347E}
 };
 
-#include <stdio.h>
 unsigned short keymap_find(unsigned int tag, char *value)
 {
 	int idx;
