@@ -22,11 +22,14 @@ void *serial_read_thread(void *param)
         if (serial->in->done) {
             serial->in->moribund = true;
             serial->in->signal_from_main = true;
+            printf("try to close reading subthread\n");
             pthread_join(in_tid, NULL);
+            printf("reading subthread is exit\n");
             break;
         }
         usleep(1000);
     }
+    printf("reading thread is exit\n");
     return NULL;
 }
 
@@ -55,11 +58,14 @@ void *serial_write_thread(void *param)
             serial->out->moribund = true;
             serial->out->signal_from_main = true;
             pthread_join(out_tid, NULL);
+            printf("writing subthread is exit\n");
             break;
         }
         serial->out->signal_from_main = true;
     }
     serial->in->moribund = true; /* force read threads exit */
+    printf("writing thread is exit\n");
+    printf("serial->in->signal_from_main = %d\n", serial->in->signal_from_main);
     pthread_exit(NULL);
 }
 
@@ -103,4 +109,3 @@ int main(int argc, char *argv[])
 
     return 0;
 }
-

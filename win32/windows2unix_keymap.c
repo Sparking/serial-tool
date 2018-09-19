@@ -4,9 +4,9 @@
 #include "keymap.h"
 
 static struct /* _win2unix_keymap_key_t */{
-	unsigned short tag;
-	unsigned short _size;
-	unsigned long long value;
+    unsigned short tag;
+    unsigned short _size;
+    unsigned long long value;
 } _win2unix_keymap[22] = {
 {/* "up",       */0xE048, 3, 0x1B5B41},
 {/* "down",     */0xE050, 3, 0x1B5B42},
@@ -34,22 +34,22 @@ static struct /* _win2unix_keymap_key_t */{
 
 unsigned short keymap_find(unsigned int tag, char *value)
 {
-	int idx;
-	int size;
-	char *pv;
+    int idx;
+    int size;
+    char *pv;
 
-	for (idx = 0; idx < 22; ++idx) {
-		if (tag == _win2unix_keymap[idx].tag)
-			break;
-	}
-	if (idx >= 22)
-		return 0;
+    for (idx = 0; idx < 22; ++idx) {
+        if (tag == _win2unix_keymap[idx].tag)
+            break;
+    }
+    if (idx >= 22)
+        return 0;
 
-	size = _win2unix_keymap[idx]._size;
-	pv = (char *)&_win2unix_keymap[idx].value;
-	*(unsigned long long *)value = 0;
-	while (size-- > 0)
-		value[size] = *pv++;
+    size = _win2unix_keymap[idx]._size;
+    pv = (char *)&_win2unix_keymap[idx].value;
+    *(unsigned long long *)value = 0;
+    while (size-- > 0)
+        value[size] = *pv++;
 
-	return _win2unix_keymap[idx]._size;
+    return _win2unix_keymap[idx]._size;
 }

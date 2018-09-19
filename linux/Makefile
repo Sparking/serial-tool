@@ -2,7 +2,7 @@ CC = gcc
 LD = gcc
 
 CFLAGS = -O0 -g
-CPPFLAGS = -Wall -Werror -std=gnu99 -I../
+CPPFLAGS = -Wall -Werror -std=gnu99 -I../ -I../common/
 LDFLAGS = $(CFLAGS)
 LIBS = -lpthread
 

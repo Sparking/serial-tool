@@ -4,7 +4,7 @@ CC = $(COMPILER_PREFIX)gcc
 RM=del
 
 CFLAGS = -g -O0
-CPPFLAGS = -std=c99 -I..
+CPPFLAGS = -std=c99 -I.. -I../common
 LDFLAGS = $(CFLAGS)
 LIBS = -ladvapi32 -lcomdlg32 -lgdi32 -limm32 \
 		-lole32 -lshell32 -luser32
